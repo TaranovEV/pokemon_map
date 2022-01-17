@@ -29,7 +29,7 @@ def show_all_pokemons(request):
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
 
     for pokemon in pokemons:
-        for entity in pokemon.exemplar_pokemon.all():
+        for entity in pokemon.entitys.all():
             add_pokemon(
                 folium_map, entity.Lat,
                 entity.Lon,
@@ -87,7 +87,7 @@ def show_pokemon(request, pokemon_id):
         return HttpResponseNotFound('<h1>Возвращено более одного объекта</h1>')
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
-    for pokemon_entity in pokemon.exemplar_pokemon.filter(Pokemon=requested_pokemon):
+    for pokemon_entity in pokemon.entitys.filter(Pokemon=requested_pokemon):
         add_pokemon(
             folium_map, pokemon_entity.Lat,
             pokemon_entity.Lon,
