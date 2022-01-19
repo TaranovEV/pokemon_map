@@ -75,7 +75,10 @@ def show_pokemon(request, pokemon_id):
         'title_en': pokemon.title_en,
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
-            }
+        }
+    
+    pokemon_on_page['element_type'] = pokemon.element_type.all()
+
     if pokemon.next_evolution is not None:
             pokemon_on_page['next_evolution'] = {
                 'title_ru': pokemon.next_evolution.title,
@@ -96,7 +99,6 @@ def show_pokemon(request, pokemon_id):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon.entitys.filter(Pokemon=pokemon):
-        print(pokemon_entity.Level)
         add_pokemon(
             folium_map, pokemon_entity.Lat,
             pokemon_entity.Lon,
@@ -105,8 +107,6 @@ def show_pokemon(request, pokemon_id):
             pokemon_entity.Strength, 
             pokemon_entity.Defence, 
             pokemon_entity.Stamina, 
-            pokemon_entity.Appeared_at, 
-            pokemon_entity.Disappeared_at,
             (request.build_absolute_uri(pokemon.image.url)
                 if pokemon.image else None)
         )

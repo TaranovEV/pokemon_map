@@ -4,11 +4,14 @@ from django.db import models
 
 class PokemonElementType(models.Model):
     title = models.CharField(verbose_name='Element type', max_length=200)
-    
+    image = models.ImageField('Изображение',
+                              upload_to='pokemon_entities',
+                              blank=True)
+                              
     def __str__(self):
         return '{}'.format(self.title)
 
-        
+
 class Pokemon(models.Model):
     title = models.CharField('Название', max_length=200)
     image = models.ImageField('Изображение',
@@ -26,6 +29,7 @@ class Pokemon(models.Model):
                                        blank=True,
                                        verbose_name='Следующая эволюция',) 
     element_type = models.ManyToManyField(PokemonElementType)
+
 
     def __str__(self):
         return '{}'.format(self.title)
