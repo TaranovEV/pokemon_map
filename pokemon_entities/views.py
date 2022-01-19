@@ -13,7 +13,10 @@ DEFAULT_IMAGE_URL = (
 )
 
 
-def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
+def add_pokemon(folium_map, lat, lon, 
+                level, healts, strength, 
+                defence, stamina, 
+                image_url=DEFAULT_IMAGE_URL):
     icon = folium.features.CustomIcon(
         image_url,
         icon_size=(50, 50),
@@ -21,6 +24,12 @@ def add_pokemon(folium_map, lat, lon, image_url=DEFAULT_IMAGE_URL):
     folium.Marker(
         [lat, lon],
         icon=icon,
+        tooltip=('Level: ' + str(level) + ' ' + 
+                'Strength: ' + str(strength) + ' ' + 
+                'Healts: ' + str(healts) + ' ' + 
+                'Defence: ' + str(defence) + ' ' + 
+                'Stamina: '  + str(stamina)
+        )
     ).add_to(folium_map)
 
 
@@ -31,11 +40,16 @@ def show_all_pokemons(request):
     for pokemon in pokemons:
         for entity in pokemon.entitys.all():
             add_pokemon(
-                folium_map, entity.Lat,
-                entity.Lon,
-                (request.build_absolute_uri(pokemon.image.url)
-                    if pokemon.image else None),
-            )    
+            folium_map, entity.Lat,
+            entity.Lon,
+            entity.Level, 
+            entity.Healts, 
+            entity.Strength, 
+            entity.Defence, 
+            entity.Stamina,
+            (request.build_absolute_uri(pokemon.image.url)
+                if pokemon.image else None)
+        )    
 
     pokemons_on_page = []
     for pokemon in pokemons:
@@ -82,9 +96,17 @@ def show_pokemon(request, pokemon_id):
 
     folium_map = folium.Map(location=MOSCOW_CENTER, zoom_start=12)
     for pokemon_entity in pokemon.entitys.filter(Pokemon=pokemon):
+        print(pokemon_entity.Level)
         add_pokemon(
             folium_map, pokemon_entity.Lat,
             pokemon_entity.Lon,
+            pokemon_entity.Level, 
+            pokemon_entity.Healts, 
+            pokemon_entity.Strength, 
+            pokemon_entity.Defence, 
+            pokemon_entity.Stamina, 
+            pokemon_entity.Appeared_at, 
+            pokemon_entity.Disappeared_at,
             (request.build_absolute_uri(pokemon.image.url)
                 if pokemon.image else None)
         )
