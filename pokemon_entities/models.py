@@ -7,7 +7,10 @@ class PokemonElementType(models.Model):
     image = models.ImageField('Изображение',
                               upload_to='pokemon_entities',
                               blank=True)
-                              
+    strong_against = models.ManyToManyField('self',
+                                            verbose_name='Strong against', 
+                                            symmetrical=False,
+                                            blank=True,)                          
     def __str__(self):
         return '{}'.format(self.title)
 

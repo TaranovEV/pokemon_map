@@ -76,8 +76,14 @@ def show_pokemon(request, pokemon_id):
         'title_jp': pokemon.title_jp,
         'description': pokemon.description,
         }
-    
-    pokemon_on_page['element_type'] = pokemon.element_type.all()
+
+    pokemon_on_page['element_type'] = []
+    for el in pokemon.element_type.all():
+        pokemon_on_page['element_type'].append({
+            'title':el.title,
+            'image':el.image,
+            'strong_against': list(el.strong_against.values_list('title', flat=True))
+        })
 
     if pokemon.next_evolution is not None:
             pokemon_on_page['next_evolution'] = {
